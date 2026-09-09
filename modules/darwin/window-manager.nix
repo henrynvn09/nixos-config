@@ -4,7 +4,7 @@
   # Yabai tiling window manager
   services.yabai = {
     enable = true;
-    enableScriptingAddition = false;
+    enableScriptingAddition = true; # Installs sudoers entry for yabai --load-sa
   };
 
   # SKHD simple hotkey daemon

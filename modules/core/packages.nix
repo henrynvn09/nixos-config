@@ -1,8 +1,7 @@
 { pkgs, ... }:
 
-{
-  # Core CLI packages available on all machines
-  environment.systemPackages = with pkgs; [
+let
+  commonPackages = with pkgs; [
     # Core essentials
     git
     neovim
@@ -21,16 +20,34 @@
     tldr
     trash-cli
 
+    # Script evaluation & media tools
+    bc
+    imagemagick
+    exiftool
+    yadm
+    mutt
+
     # Development tools & runtimes
     cmake
     go
     lua
     uv
 
-    # Media & utilities
+    # Secrets management tooling
+    sops
+    age
+
+    # Archives & utilities
     ffmpeg
     yt-dlp
     zip
     unzip
   ];
+in
+{
+  # System-level packages for macOS and NixOS
+  environment.systemPackages = commonPackages;
+
+  # Export package list for Home Manager consumption
+  _module.args.commonPackages = commonPackages;
 }

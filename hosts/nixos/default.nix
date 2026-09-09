@@ -1,11 +1,11 @@
-{ config, pkgs, ... }:
+{ config, pkgs, lib, ... }:
 
 {
   imports = [
     ../../modules/core
   ];
 
-  networking.hostName = "nixos";
+  networking.hostName = lib.mkDefault "nixos";
 
   # Bootloader setup (standard systemd-boot for UEFI)
   boot.loader.systemd-boot.enable = true;
@@ -29,6 +29,7 @@
   home-manager = {
     useGlobalPkgs = true;
     useUserPackages = true;
+    backupFileExtension = "backup";
     users.henry = import ../../modules/home;
   };
 

@@ -10,14 +10,14 @@
       cleanup = "none"; # Prevent unintended deletion of manually installed packages
     };
 
-    taps = [
-      "koekeishiya/formulae"
-    ];
+    taps = [];
 
     # macOS-specific CLI tools managed via Homebrew formulae
     brews = [
+      "brightness"     # Required by Raycast monitor & brightness scripts
       "ddcctl"
       "displayplacer"
+      "mas"            # Mac App Store command-line interface
     ];
 
     # macOS GUI applications managed via Homebrew casks
@@ -48,12 +48,10 @@
 
       # System Utilities & Peripherals
       "battery"
-      "battery-toolkit"
       "betterdisplay"
       "bluesnooze"
       "appcleaner"
       "jordanbaird-ice"
-      "localsend"
       "mac-mouse-fix"
       "middleclick"
       "the-unarchiver"
@@ -71,5 +69,11 @@
       "font-mononoki-nerd-font"
       "font-sauce-code-pro-nerd-font"
     ];
+
+    # Mac App Store applications
+    masApps = {
+      "Dropover" = 1355679052;
+      "LocalSend" = 1661733229;
+    };
   };
 }

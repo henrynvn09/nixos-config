@@ -258,7 +258,7 @@ photo_downscale_and_geotag() {
     fi
 
     # Resize images first (using the photo_resize_to_4k function)
-    photo_resize_to_4k -o "$OUTPUT_DIR" "${INPUT_FILES[@]}"
+    photo_downscale_to_4k -o "$OUTPUT_DIR" "${INPUT_FILES[@]}"
 
     # Get the list of resized files from the output directory
     RESIZED_FILES=()

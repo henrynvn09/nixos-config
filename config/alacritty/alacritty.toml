@@ -3,7 +3,7 @@
 animation = "EaseOutExpo"
 color = "#32BB2D"
 duration = 300
-# command = { program = "afplay", args = ["/Users/henry/.config/alacritty/resources/kernel.m4a"] }
+# command = { program = "afplay", args = ["resources/kernel.m4a"] }
 
 [cursor]
 blink_timeout = 0
@@ -75,7 +75,7 @@ bindings = [
 ]
 
 [general]
-import = ["/Users/henry/.config/alacritty/themes/themes/taerminal.toml"]
+import = ["themes/themes/taerminal.toml"]
 
 
 # dynamic_title = false

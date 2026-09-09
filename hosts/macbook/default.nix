@@ -1,4 +1,4 @@
-{ config, pkgs, ... }:
+{ config, pkgs, lib, ... }:
 
 {
   imports = [
@@ -6,9 +6,9 @@
     ../../modules/darwin
   ];
 
-  # Host identification
-  networking.hostName = "Henrys-MacBook-Pro";
-  networking.computerName = "Henrys-MacBook-Pro";
+  # Host identification (fallback defaults without forcing rebrand on other machines)
+  networking.hostName = lib.mkDefault "Henrys-MacBook-Pro";
+  networking.computerName = lib.mkDefault "Henrys-MacBook-Pro";
 
   # User account configuration
   users.users.henry = {
@@ -21,6 +21,7 @@
   home-manager = {
     useGlobalPkgs = true;
     useUserPackages = true;
+    backupFileExtension = "backup"; # Automatically backup colliding files (prevents activation aborts)
     users.henry = import ../../modules/home;
   };
 }

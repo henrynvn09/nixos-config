@@ -64,7 +64,6 @@
 
       # Finder preferences
       finder = {
-        _FXShowPosixPathInTitle = true;
         FXPreferredViewStyle = "Nlsv";     # Default to list view
         FXDefaultSearchScope = "SCcf";     # Search current folder by default
         FXRemoveOldTrashItems = true;      # Automatically empty trash after 30 days
@@ -76,23 +75,24 @@
         ShowRemovableMediaOnDesktop = true;
       };
 
-      # Advanced / Hidden custom preferences
+      # macOS Sequoia native window tiling (disable to prevent Yabai conflicts)
+      WindowManager = {
+        EnableStandardClickToShowDesktop = false;
+        EnableTilingByEdgeDrag = false;
+        EnableTopTilingByEdgeDrag = false;
+        EnableTilingOptionAccelerator = false;
+        EnableTiledWindowMargins = false;
+        HideDesktop = true;
+      };
+
+      # Accessibility settings
+      universalaccess = {
+        reduceMotion = true;
+        mouseDriverCursorSize = 1.613758;
+      };
+
+      # Custom preferences for third-party apps
       CustomUserPreferences = {
-        # macOS Sequoia native window tiling disabled to prevent conflicts with Yabai
-        "com.apple.windowmanager" = {
-          EnableTilingOptionAccelerator = false;
-          EnableTilingByEdgeDrag = false;
-          EnableTopTilingByEdgeDrag = false;
-          EnableStandardClickToShowDesktop = false;
-          HideDesktop = true;
-        };
-
-        # Accessibility settings
-        "com.apple.universalaccess" = {
-          reduceMotion = 1;
-          mouseDriverCursorSize = 1.613758;
-        };
-
         # Raycast hotkey & vim navigation
         "com.raycast.macos" = {
           raycastGlobalHotkey = "Option-49"; # Option + Space
@@ -101,5 +101,19 @@
         };
       };
     };
+
+    # System activation scripts for hardware settings
+    activationScripts.postActivation.text = ''
+      # Restore internal MacBook keyboard modifier mapping (Caps Lock -> Cmd, Fn -> Cmd, Cmd -> Opt, Opt -> Disabled)
+      defaults -currentHost write -g "com.apple.keyboard.modifiermapping.1452-834-0" -array \
+        '{"HIDKeyboardModifierMappingSrc":30064771300,"HIDKeyboardModifierMappingDst":30064771300}' \
+        '{"HIDKeyboardModifierMappingSrc":280379760050179,"HIDKeyboardModifierMappingDst":30064771299}' \
+        '{"HIDKeyboardModifierMappingSrc":30064771302,"HIDKeyboardModifierMappingDst":30064771072}' \
+        '{"HIDKeyboardModifierMappingSrc":1095216660483,"HIDKeyboardModifierMappingDst":30064771303}' \
+        '{"HIDKeyboardModifierMappingSrc":30064771298,"HIDKeyboardModifierMappingDst":30064771072}' \
+        '{"HIDKeyboardModifierMappingSrc":30064771299,"HIDKeyboardModifierMappingDst":30064771298}' \
+        '{"HIDKeyboardModifierMappingSrc":30064771296,"HIDKeyboardModifierMappingDst":30064771296}' \
+        '{"HIDKeyboardModifierMappingSrc":30064771303,"HIDKeyboardModifierMappingDst":30064771302}'
+    '';
   };
 }

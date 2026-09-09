@@ -12,7 +12,7 @@
 # @raycast.description rename latest "unified resume" downloaded to Henry Nguyen Resume
 # @raycast.author henry_nguyen
 # @raycast.authorURL https://raycast.com/henry_nguyen
-downloads="/Users/henry/Downloads"
+downloads="$HOME/Downloads"
 latest_file=$(find "$downloads" -name "unified_resume*.pdf" -mtime -5m -type f -exec stat -f "%m %N" {} \; 2>/dev/null | sort -nr | head -1 | cut -d' ' -f2-)
 
 if [ -n "$latest_file" ]; then

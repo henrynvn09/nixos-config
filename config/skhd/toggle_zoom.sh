@@ -1,30 +1,40 @@
 #!/usr/bin/env bash
+set -e
 
-function window_is_float
-    set layout $(yabai -m query --spaces --space | jq '.type')
-    [ "$layout" = "\"float\"" ] && echo true
-    echo $(yabai -m query --windows --window | jq '."is-floating"')
-end
+window_is_float() {
+    local layout
+    layout=$(yabai -m query --spaces --space 2>/dev/null | jq -r '.type // empty')
+    if [ "$layout" = "float" ]; then
+        echo "true"
+        return
+    fi
+    yabai -m query --windows --window 2>/dev/null | jq -r '."is-floating" // false'
+}
 
-function toggle_zoom
-    set float $(window_is_float)
+toggle_zoom() {
+    local is_floating
+    is_floating=$(window_is_float)
 
-    if $float
-        mkdir -p /tmp/yabai/zoom_cache
-        cd /tmp/yabai/zoom_cache
-        set window_id $(yabai -m query --windows --window | jq '.id')
+    if [ "$is_floating" = "true" ]; then
+        local cache_dir="/tmp/yabai/zoom_cache"
+        mkdir -p "$cache_dir"
+        local window_id
+        window_id=$(yabai -m query --windows --window 2>/dev/null | jq -r '.id // empty')
+        [ -z "$window_id" ] || [ "$window_id" = "null" ] && return 0
 
-        if [ -e $window_id ]
-            cat $window_id | read x y w h
-            yabai -m window --resize abs:$w:$h
-            yabai -m window --move abs:$x:$y
-            rm -rf $window_id
+        local cache_file="$cache_dir/$window_id"
+        if [ -f "$cache_file" ]; then
+            read -r x y w h < "$cache_file"
+            yabai -m window --resize "abs:$w:$h"
+            yabai -m window --move "abs:$x:$y"
+            rm -f "$cache_file"
         else
-            yabai -m query --windows --window | jq '.frame.x, .frame.y, .frame.w, .frame.h' | tr '\n' ' ' > $window_id
+            yabai -m query --windows --window | jq -r '.frame.x, .frame.y, .frame.w, .frame.h' | tr '\n' ' ' > "$cache_file"
             yabai -m window --grid 1:1:0:0:1:1
-        end
-
+        fi
     else
         yabai -m window --toggle zoom-fullscreen
-    end
-end
+    fi
+}
+
+toggle_zoom

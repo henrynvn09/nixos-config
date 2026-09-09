@@ -10,3 +10,4 @@ secrets/private_keys.txt
 # macOS artifacts
 .DS_Store
 *.swp
+config/raycast/config.json
