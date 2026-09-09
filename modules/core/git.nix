@@ -14,16 +14,10 @@
         autocrlf = "input";
       };
       diff = {
-        tool = "vscode";
-      };
-      difftool."vscode" = {
-        cmd = "code --wait --diff $LOCAL $REMOTE";
+        tool = "vimdiff";
       };
       merge = {
-        tool = "vscode";
-      };
-      mergetool."vscode" = {
-        cmd = "code --wait $MERGED";
+        tool = "vimdiff";
       };
       init = {
         defaultBranch = "main";

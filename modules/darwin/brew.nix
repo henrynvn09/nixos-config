@@ -17,32 +17,23 @@
       "brightness"     # Required by Raycast monitor & brightness scripts
       "ddcctl"
       "displayplacer"
-      "mas"            # Mac App Store command-line interface
     ];
 
     # macOS GUI applications managed via Homebrew casks
     casks = [
-      # Editors & IDEs
-      "cursor"
-      "visual-studio-code"
+      # Terminal & IDEs
       "alacritty"
-      "kitty"
-      "sublime-text"
       "intellij-idea"
-      "android-studio"
 
       # Browsers
       "arc"
-      "brave-browser"
       "firefox"
-      "floorp"
       "google-chrome"
 
       # Productivity & Communication
       "obsidian"
       "raycast"
       "discord"
-      "slack"
       "anki"
       "calibre"
 
@@ -69,11 +60,5 @@
       "font-mononoki-nerd-font"
       "font-sauce-code-pro-nerd-font"
     ];
-
-    # Mac App Store applications
-    masApps = {
-      "Dropover" = 1355679052;
-      "LocalSend" = 1661733229;
-    };
   };
 }
