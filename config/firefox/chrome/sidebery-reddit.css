@@ -1,0 +1,33 @@
+  #sidebar-box {
+  --uc-sidebar-width: 5%;
+  --uc-sidebar-hover-width: 300px;
+  --uc-autohide-sidebar-delay: 90ms;
+	/* Wait 0.6s before hiding sidebar */
+	position: relative;
+	min-width: var(--uc-sidebar-width) !important;
+	width: var(--uc-sidebar-width) !important;
+	max-width: var(--uc-sidebar-width) !important;
+	z-index: 10;
+}
+
+#sidebar {
+	transition: min-width 100ms linear var(--uc-autohide-sidebar-delay) !important;
+	min-width: var(--uc-sidebar-width) !important;
+	will-change: min-width;
+}
+
+#sidebar-box:hover>#sidebar-header,
+#sidebar-box:hover>#sidebar {
+	min-width: var(--uc-sidebar-hover-width) !important;
+	transition-delay: 0ms !important;
+}
+
+#sidebar-header{
+  overflow: hidden;
+  color: var(--chrome-color, inherit) !important;
+  padding-inline: 0 !important;
+}
+
+#sidebar-panel-header {
+    display: none !important;
+}

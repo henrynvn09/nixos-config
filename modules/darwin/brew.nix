@@ -49,8 +49,11 @@
       # System Utilities & Peripherals
       "battery"
       "battery-toolkit"
+      "betterdisplay"
       "bluesnooze"
       "appcleaner"
+      "jordanbaird-ice"
+      "localsend"
       "mac-mouse-fix"
       "middleclick"
       "the-unarchiver"
