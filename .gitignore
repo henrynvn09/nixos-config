@@ -1,0 +1,12 @@
+# Nix build results
+result
+result-*
+
+# Secrets and local overrides
+.env.local
+*.age.key
+secrets/private_keys.txt
+
+# macOS artifacts
+.DS_Store
+*.swp
