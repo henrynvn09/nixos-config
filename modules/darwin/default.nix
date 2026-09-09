@@ -93,11 +93,22 @@
 
       # Custom preferences for third-party apps
       CustomUserPreferences = {
-        # Raycast hotkey & vim navigation
+        # Raycast preferences & keyboard navigation
         "com.raycast.macos" = {
           raycastGlobalHotkey = "Option-49"; # Option + Space
-          navigationCommandStyleIdentifierKey = "vim";
-          enforcedInputSourceIDOnOpen = "com.apple.keylayout.US";
+          navigationCommandStyleIdentifierKey = "vim"; # Vim navigation (h/j/k/l)
+          enforcedInputSourceIDOnOpen = "com.apple.keylayout.US"; # Automatically switch to US keyboard layout
+          raycastShouldFollowSystemAppearance = false; # Force dark mode theme
+          raycastCurrentThemeId = "bundled-raycast-dark";
+          raycastCurrentThemeIdDarkAppearance = "bundled-raycast-dark";
+          raycastCurrentThemeIdLightAppearance = "bundled-raycast-light";
+          raycastPreferredWindowMode = "default";
+          showGettingStartedLink = false;
+          "script-command-mode" = "Compact";
+          "script-command-template" = "Bash";
+          useHyperKeyIcon = false;
+          screenshots_dataSourceEnabled = true;
+          snippets_selectedCategoryFilter = "all";
         };
       };
     };
