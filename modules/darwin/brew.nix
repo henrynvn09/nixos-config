@@ -15,8 +15,7 @@
     # macOS-specific CLI tools managed via Homebrew formulae
     brews = [
       "brightness"     # Required by Raycast monitor & brightness scripts
-      "ddcctl"
-      "displayplacer"
+      "displayplacer"  # Required by Raycast display layout switcher extension
     ];
 
     # macOS GUI applications managed via Homebrew casks
