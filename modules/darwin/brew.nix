@@ -48,7 +48,6 @@
       "betterzip"
       "kap"
       "postman"
-      "ngrok"
 
       # Developer Fonts
       "font-jetbrains-mono-nerd-font"
