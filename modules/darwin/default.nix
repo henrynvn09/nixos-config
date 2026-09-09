@@ -6,8 +6,8 @@
     ./window-manager.nix
   ];
 
-  # Nix daemon management
-  services.nix-daemon.enable = true;
+  # Primary user running system activation and user defaults
+  system.primaryUser = "henry";
 
   # Create /etc/zshrc that loads the nix-darwin environment
   programs.zsh.enable = true;

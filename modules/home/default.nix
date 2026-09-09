@@ -6,6 +6,12 @@
     ../core/git.nix
   ];
 
+  # User identity & home directory
+  home.username = lib.mkDefault "henry";
+  home.homeDirectory = lib.mkDefault (
+    if pkgs.stdenv.hostPlatform.isDarwin then "/Users/henry" else "/home/henry"
+  );
+
   # Home Manager state version
   home.stateVersion = "24.05";
 
@@ -44,7 +50,7 @@
       dotfiles = "cd ~/dotfiles";
     };
 
-    initExtra = ''
+    initContent = ''
       # Accept autosuggestion with Ctrl-F
       bindkey '^F' forward-word
 

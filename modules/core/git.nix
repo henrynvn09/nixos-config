@@ -3,10 +3,12 @@
 {
   programs.git = {
     enable = true;
-    userName = "henrynvn09";
-    userEmail = "henrynvn09@gmail.com";
 
-    extraConfig = {
+    settings = {
+      user = {
+        name = "henrynvn09";
+        email = "henrynvn09@gmail.com";
+      };
       core = {
         symlinks = true;
         autocrlf = "input";

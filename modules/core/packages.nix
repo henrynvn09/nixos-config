@@ -20,7 +20,6 @@
     fzf
     tldr
     trash-cli
-    thefuck
 
     # Development tools & runtimes
     cmake
