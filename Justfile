@@ -65,3 +65,7 @@ generations:
     else
         home-manager generations
     fi
+
+# Audit newly installed packages against dotfiles configuration
+check-packages:
+    @python3 scripts/check-packages.py

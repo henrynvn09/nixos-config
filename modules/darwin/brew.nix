@@ -48,6 +48,7 @@
       "betterzip"
       "kap"
       "postman"
+      "phoenix-slides"
 
       # Developer Fonts
       "font-jetbrains-mono-nerd-font"
