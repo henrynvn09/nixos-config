@@ -10,6 +10,12 @@ switch:
     set -euo pipefail
     DOTFILES_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
     if [[ "$(uname)" == "Darwin" ]]; then
+        for etc_file in /etc/zshrc /etc/bashrc; do
+            if [ -f "$etc_file" ] && [ ! -L "$etc_file" ]; then
+                echo "Backing up existing $etc_file to ${etc_file}.before-nix-darwin..."
+                sudo mv "$etc_file" "${etc_file}.before-nix-darwin"
+            fi
+        done
         if command -v darwin-rebuild &> /dev/null; then
             darwin-rebuild switch --flake "${DOTFILES_DIR}#macbook"
         else
