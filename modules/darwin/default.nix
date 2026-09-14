@@ -117,14 +117,14 @@
     activationScripts.postActivation.text = ''
       # Restore internal MacBook keyboard modifier mapping (Caps Lock -> Cmd, Fn -> Cmd, Cmd -> Opt, Opt -> Disabled)
       defaults -currentHost write -g "com.apple.keyboard.modifiermapping.1452-834-0" -array \
-        '{"HIDKeyboardModifierMappingSrc":30064771300,"HIDKeyboardModifierMappingDst":30064771300}' \
-        '{"HIDKeyboardModifierMappingSrc":280379760050179,"HIDKeyboardModifierMappingDst":30064771299}' \
-        '{"HIDKeyboardModifierMappingSrc":30064771302,"HIDKeyboardModifierMappingDst":30064771072}' \
-        '{"HIDKeyboardModifierMappingSrc":1095216660483,"HIDKeyboardModifierMappingDst":30064771303}' \
-        '{"HIDKeyboardModifierMappingSrc":30064771298,"HIDKeyboardModifierMappingDst":30064771072}' \
-        '{"HIDKeyboardModifierMappingSrc":30064771299,"HIDKeyboardModifierMappingDst":30064771298}' \
-        '{"HIDKeyboardModifierMappingSrc":30064771296,"HIDKeyboardModifierMappingDst":30064771296}' \
-        '{"HIDKeyboardModifierMappingSrc":30064771303,"HIDKeyboardModifierMappingDst":30064771302}'
+        '{ HIDKeyboardModifierMappingSrc = 30064771300; HIDKeyboardModifierMappingDst = 30064771300; }' \
+        '{ HIDKeyboardModifierMappingSrc = 280379760050179; HIDKeyboardModifierMappingDst = 30064771299; }' \
+        '{ HIDKeyboardModifierMappingSrc = 30064771302; HIDKeyboardModifierMappingDst = 30064771072; }' \
+        '{ HIDKeyboardModifierMappingSrc = 1095216660483; HIDKeyboardModifierMappingDst = 30064771303; }' \
+        '{ HIDKeyboardModifierMappingSrc = 30064771298; HIDKeyboardModifierMappingDst = 30064771072; }' \
+        '{ HIDKeyboardModifierMappingSrc = 30064771299; HIDKeyboardModifierMappingDst = 30064771298; }' \
+        '{ HIDKeyboardModifierMappingSrc = 30064771296; HIDKeyboardModifierMappingDst = 30064771296; }' \
+        '{ HIDKeyboardModifierMappingSrc = 30064771303; HIDKeyboardModifierMappingDst = 30064771302; }'
     '';
   };
 }
