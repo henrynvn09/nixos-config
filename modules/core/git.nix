@@ -4,6 +4,13 @@
   programs.git = {
     enable = true;
 
+    ignores = [
+      "npm-debug.log"
+      ".DS_Store"
+      "log/"
+      "*.log"
+    ];
+
     settings = {
       user = {
         name = "henrynvn09";
@@ -14,10 +21,20 @@
         autocrlf = "input";
       };
       diff = {
-        tool = "vimdiff";
+        tool = "vscode";
+      };
+      difftool = {
+        vscode = {
+          cmd = "code --wait --diff $LOCAL $REMOTE";
+        };
       };
       merge = {
-        tool = "vimdiff";
+        tool = "vscode";
+      };
+      mergetool = {
+        vscode = {
+          cmd = "code --wait $MERGED";
+        };
       };
       init = {
         defaultBranch = "main";

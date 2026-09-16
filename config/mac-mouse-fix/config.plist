@@ -451,13 +451,13 @@
 	<key>State</key>
 	<dict>
 		<key>autosave_tabID</key>
-		<string>general</string>
+		<string>scrolling</string>
 		<key>lastLaunchedBundleVersion</key>
 		<integer>22635</integer>
 		<key>launchesOfCurrentBundleVersion</key>
-		<integer>22</integer>
+		<integer>23</integer>
 		<key>launchesOverall</key>
-		<integer>30</integer>
+		<integer>31</integer>
 		<key>remapsAreInitialized</key>
 		<true/>
 	</dict>

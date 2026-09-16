@@ -87,6 +87,20 @@ in
       ignoreDups = true;
     };
 
+    # Oh My Zsh integration
+    oh-my-zsh = {
+      enable = true;
+      plugins = [
+        "z"
+        "gitignore"
+        "zbell"
+        "copypath"
+        "sprunge"
+        "dircycle"
+        "docker"
+      ];
+    };
+
     shellAliases = {
       vi = "nvim";
       vim = "nvim";
@@ -100,17 +114,64 @@ in
       cat = "bat";
       g = "git";
       dotfiles = "cd ~/dotfiles";
+      rasp = "ssh hthh@192.168.4.61";
+      "$" = "";
     };
 
     initContent = ''
-      # Accept autosuggestion with Ctrl-F
-      bindkey '^F' forward-word
+      ENABLE_CORRECTION="true"
+      DISABLE_UNTRACKED_FILES_DIRTY="true"
+      zbell_duration=60
 
-      # Load custom user plugins (q, photo-editing-user, misc-user-plugins, etc.)
+      # Load custom user plugins (q, photo-editing-user, misc-user-plugins, zsh-vi-mode, etc.)
       if [ -d "$HOME/.config/zsh/plugins" ]; then
         for plugin in "$HOME/.config/zsh/plugins"/*/*.plugin.zsh(N); do
           source "$plugin"
         done
+      fi
+
+      # Custom Keybindings (defined after plugins so zsh-vi-mode does not overwrite them)
+      bindkey '^F' autosuggest-accept
+      bindkey '^W' kill-word
+      bindkey '^L' forward-word
+      bindkey '^H' backward-word
+      bindkey '^[[b' beginning-of-line
+
+      bindkey -M viins '^F' autosuggest-accept
+      bindkey -M viins '^W' backward-kill-word
+      bindkey -M viins '^L' forward-word
+      bindkey -M viins '^H' backward-delete-char
+
+      # dircycle navigation
+      bindkey '^[[1;13C' insert-cycledleft
+      bindkey '^[[1;13D' insert-cycledright
+
+      # FZF custom previews & commands
+      export FZF_ALT_C_COMMAND='fd --type d --hidden --exclude ".*"'
+      export FZF_ALT_C_OPTS="--preview 'tree -C {} | head -100'"
+      export FZF_CTRL_T_COMMAND='fd --type f --hidden --ignore-case --exclude ".*"'
+      export FZF_CTRL_T_OPTS="--preview 'bat --style=numbers --color=always {} | head -100'"
+
+      # Enable fzf keybindings if present
+      [ -f "$HOME/.fzf.zsh" ] && source "$HOME/.fzf.zsh"
+
+      # Custom syntax highlight styles
+      typeset -A ZSH_HIGHLIGHT_STYLES
+      ZSH_HIGHLIGHT_STYLES[path]=none
+
+      # thefuck integration
+      if command -v thefuck &> /dev/null; then
+        eval $(thefuck --alias)
+      fi
+
+      # Register fzf-dir widget from misc-user-plugins
+      zle -N fzf-dir 2>/dev/null || true
+      bindkey '^E' fzf-dir
+      bindkey -M viins '^E' fzf-dir
+
+      # Load local environment overrides if present
+      if [ -f "$HOME/.env.local" ]; then
+        source "$HOME/.env.local"
       fi
 
       # NVM environment (if installed)
@@ -121,11 +182,6 @@ in
       # SDKMAN environment (if installed)
       export SDKMAN_DIR="$HOME/.sdkman"
       [[ -s "$SDKMAN_DIR/bin/sdkman-init.sh" ]] && source "$SDKMAN_DIR/bin/sdkman-init.sh"
-
-      # Load local environment overrides if present
-      if [ -f "$HOME/.env.local" ]; then
-        source "$HOME/.env.local"
-      fi
 
       # Dynamic PATH detection for Homebrew & user binaries
       if [ -d "/opt/homebrew/bin" ]; then
