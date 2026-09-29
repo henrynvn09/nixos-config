@@ -43,19 +43,40 @@ def parse_tracked_packages():
     return tracked_brews, tracked_casks, tracked_nix, tracked_configs
 
 
+import shutil
+
 def get_installed_brew():
     installed_brews = set()
     installed_casks = set()
 
+    brew_bin = shutil.which("brew")
+    if not brew_bin:
+        for candidate in ["/opt/homebrew/bin/brew", "/usr/local/bin/brew"]:
+            if os.path.isfile(candidate) and os.access(candidate, os.X_OK):
+                brew_bin = candidate
+                break
+
+    if not brew_bin:
+        print("Warning: brew binary not found in PATH or standard locations.", file=sys.stderr)
+        return installed_brews, installed_casks
+
     try:
-        res = subprocess.run(["brew", "leaves"], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True, check=True)
+        res = subprocess.run([brew_bin, "leaves"], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True, check=True)
         installed_brews = set(line.strip() for line in res.stdout.splitlines() if line.strip())
     except Exception as e:
         print(f"Warning: Failed to fetch brew leaves: {e}", file=sys.stderr)
 
     try:
-        res = subprocess.run(["brew", "list", "--cask"], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True, check=True)
-        installed_casks = set(line.strip() for line in res.stdout.splitlines() if line.strip())
+        # Pass CASK_OPTS or list directly via Caskroom to avoid tap warnings
+        caskroom = Path("/opt/homebrew/Caskroom")
+        if not caskroom.exists():
+            caskroom = Path("/usr/local/Caskroom")
+
+        if caskroom.exists():
+            installed_casks = set(d.name for d in caskroom.iterdir() if d.is_dir() and not d.name.startswith("."))
+        else:
+            res = subprocess.run([brew_bin, "list", "--cask"], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True, check=True)
+            installed_casks = set(line.strip() for line in res.stdout.splitlines() if line.strip())
     except Exception as e:
         print(f"Warning: Failed to fetch brew casks: {e}", file=sys.stderr)
 

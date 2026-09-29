@@ -115,16 +115,49 @@
 
     # System activation scripts for hardware settings
     activationScripts.postActivation.text = ''
-      # Restore internal MacBook keyboard modifier mapping (Caps Lock -> Cmd, Fn -> Cmd, Cmd -> Opt, Opt -> Disabled)
-      defaults -currentHost write -g "com.apple.keyboard.modifiermapping.1452-834-0" -array \
-        '{ HIDKeyboardModifierMappingSrc = 30064771300; HIDKeyboardModifierMappingDst = 30064771300; }' \
-        '{ HIDKeyboardModifierMappingSrc = 280379760050179; HIDKeyboardModifierMappingDst = 30064771299; }' \
-        '{ HIDKeyboardModifierMappingSrc = 30064771302; HIDKeyboardModifierMappingDst = 30064771072; }' \
-        '{ HIDKeyboardModifierMappingSrc = 1095216660483; HIDKeyboardModifierMappingDst = 30064771303; }' \
-        '{ HIDKeyboardModifierMappingSrc = 30064771298; HIDKeyboardModifierMappingDst = 30064771072; }' \
-        '{ HIDKeyboardModifierMappingSrc = 30064771299; HIDKeyboardModifierMappingDst = 30064771298; }' \
-        '{ HIDKeyboardModifierMappingSrc = 30064771296; HIDKeyboardModifierMappingDst = 30064771296; }' \
-        '{ HIDKeyboardModifierMappingSrc = 30064771303; HIDKeyboardModifierMappingDst = 30064771302; }'
+      # Apply MacBook internal keyboard modifier mapping live (Caps Lock -> Cmd, Fn -> Cmd, Cmd -> Opt, Opt -> Disabled)
+      /usr/bin/hidutil property --matching '{"ProductID":0x342,"VendorID":0x5ac}' --set '{"UserKeyMapping":[{"HIDKeyboardModifierMappingSrc":30064771300,"HIDKeyboardModifierMappingDst":30064771300},{"HIDKeyboardModifierMappingSrc":280379760050179,"HIDKeyboardModifierMappingDst":30064771299},{"HIDKeyboardModifierMappingSrc":30064771302,"HIDKeyboardModifierMappingDst":30064771072},{"HIDKeyboardModifierMappingSrc":1095216660483,"HIDKeyboardModifierMappingDst":30064771303},{"HIDKeyboardModifierMappingSrc":30064771129,"HIDKeyboardModifierMappingDst":30064771303},{"HIDKeyboardModifierMappingSrc":30064771298,"HIDKeyboardModifierMappingDst":30064771072},{"HIDKeyboardModifierMappingSrc":30064771299,"HIDKeyboardModifierMappingDst":30064771298},{"HIDKeyboardModifierMappingSrc":30064771296,"HIDKeyboardModifierMappingDst":30064771296},{"HIDKeyboardModifierMappingSrc":30064771303,"HIDKeyboardModifierMappingDst":30064771302}]}' || true
+
+      # Synchronize ByHost GlobalPreferences plist with integer types so macOS System Settings recognizes the mapping
+      python3 -c '
+import plistlib, glob, os
+byhost_files = glob.glob(os.path.expanduser("~/Library/Preferences/ByHost/.GlobalPreferences.*.plist"))
+mappings = [
+    {"HIDKeyboardModifierMappingSrc": 30064771300, "HIDKeyboardModifierMappingDst": 30064771300},
+    {"HIDKeyboardModifierMappingSrc": 280379760050179, "HIDKeyboardModifierMappingDst": 30064771299},
+    {"HIDKeyboardModifierMappingSrc": 30064771302, "HIDKeyboardModifierMappingDst": 30064771072},
+    {"HIDKeyboardModifierMappingSrc": 1095216660483, "HIDKeyboardModifierMappingDst": 30064771303},
+    {"HIDKeyboardModifierMappingSrc": 30064771129, "HIDKeyboardModifierMappingDst": 30064771303},
+    {"HIDKeyboardModifierMappingSrc": 30064771298, "HIDKeyboardModifierMappingDst": 30064771072},
+    {"HIDKeyboardModifierMappingSrc": 30064771299, "HIDKeyboardModifierMappingDst": 30064771298},
+    {"HIDKeyboardModifierMappingSrc": 30064771296, "HIDKeyboardModifierMappingDst": 30064771296},
+    {"HIDKeyboardModifierMappingSrc": 30064771303, "HIDKeyboardModifierMappingDst": 30064771302}
+]
+for f in byhost_files:
+    try:
+        with open(f, "rb") as fp:
+            data = plistlib.load(fp)
+        data["com.apple.keyboard.modifiermapping.1452-834-0"] = mappings
+        with open(f, "wb") as fp:
+            plistlib.dump(data, fp)
+    except Exception as e:
+        pass
+' || true
     '';
+  };
+
+  # LaunchAgent to ensure hardware modifier remapping applies on every login/boot
+  launchd.user.agents.keyboard-remap = {
+    serviceConfig = {
+      ProgramArguments = [
+        "/usr/bin/hidutil"
+        "property"
+        "--matching"
+        "{\"ProductID\":0x342,\"VendorID\":0x5ac}"
+        "--set"
+        "{\"UserKeyMapping\":[{\"HIDKeyboardModifierMappingSrc\":30064771300,\"HIDKeyboardModifierMappingDst\":30064771300},{\"HIDKeyboardModifierMappingSrc\":280379760050179,\"HIDKeyboardModifierMappingDst\":30064771299},{\"HIDKeyboardModifierMappingSrc\":30064771302,\"HIDKeyboardModifierMappingDst\":30064771072},{\"HIDKeyboardModifierMappingSrc\":1095216660483,\"HIDKeyboardModifierMappingDst\":30064771303},{\"HIDKeyboardModifierMappingSrc\":30064771129,\"HIDKeyboardModifierMappingDst\":30064771303},{\"HIDKeyboardModifierMappingSrc\":30064771298,\"HIDKeyboardModifierMappingDst\":30064771072},{\"HIDKeyboardModifierMappingSrc\":30064771299,\"HIDKeyboardModifierMappingDst\":30064771298},{\"HIDKeyboardModifierMappingSrc\":30064771296,\"HIDKeyboardModifierMappingDst\":30064771296},{\"HIDKeyboardModifierMappingSrc\":30064771303,\"HIDKeyboardModifierMappingDst\":30064771302}]}"
+      ];
+      RunAtLoad = true;
+    };
   };
 }

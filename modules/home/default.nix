@@ -4,6 +4,7 @@ let
   commonCliPackages = with pkgs; [
     # Core essentials
     git
+    gh
     neovim
     curl
     wget
