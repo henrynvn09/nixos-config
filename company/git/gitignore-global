@@ -1,0 +1,14 @@
+# company/git/gitignore-global — Global gitignore rules
+# Source: modules/core/git.nix → ignores
+
+.DS_Store
+npm-debug.log
+log/
+*.log
+*.swp
+*.swo
+*~
+.direnv
+.envrc
+result
+result-*

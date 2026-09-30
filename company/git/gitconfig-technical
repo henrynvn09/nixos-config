@@ -1,0 +1,31 @@
+# company/git/gitconfig-technical — Technical Git settings only
+# Source: modules/core/git.nix
+#
+# ⚠️  NO personal identity (user.name / user.email)
+#     Use whatever your company configures, or set it manually:
+#     git config --global user.name "Your Name"
+#     git config --global user.email "you@company.com"
+
+[core]
+    autocrlf = input
+    symlinks = true
+
+[init]
+    defaultBranch = main
+
+[push]
+    default = current
+
+[pull]
+    rebase = true
+
+# VS Code as diff/merge tool (only works if VS Code is installed)
+# Uncomment if VS Code is available on your company Mac:
+# [diff]
+#     tool = vscode
+# [difftool "vscode"]
+#     cmd = code --wait --diff $LOCAL $REMOTE
+# [merge]
+#     tool = vscode
+# [mergetool "vscode"]
+#     cmd = code --wait $MERGED
