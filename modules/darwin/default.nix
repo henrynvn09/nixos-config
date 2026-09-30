@@ -120,24 +120,36 @@
       # Mac:  fn -> cmd, ctrl -> ctrl, opt -> globe, cmd -> opt
       /Users/henry/.local/bin/remap-keys || true
 
-      # Ensure ByHost modifiermapping is cleared so macOS WindowServer does not double-map on top of hidutil
+      # Manage MacBook internal keyboard via native macOS Settings (ByHost GlobalPreferences)
+      # while leaving Logitech exclusively to hidutil (avoiding double-mapping)
       python3 -c '
 import plistlib, glob, os
 byhost_files = glob.glob(os.path.expanduser("~/Library/Preferences/ByHost/.GlobalPreferences.*.plist"))
+mac_mappings = [
+    # Fn -> Left Cmd
+    {"HIDKeyboardModifierMappingSrc": 1095216660483, "HIDKeyboardModifierMappingDst": 30064771299},
+    {"HIDKeyboardModifierMappingSrc": 280379760050179, "HIDKeyboardModifierMappingDst": 30064771299},
+    # Option -> Globe/Fn
+    {"HIDKeyboardModifierMappingSrc": 30064771298, "HIDKeyboardModifierMappingDst": 1095216660483},
+    {"HIDKeyboardModifierMappingSrc": 30064771302, "HIDKeyboardModifierMappingDst": 1095216660483},
+    # Command -> Option
+    {"HIDKeyboardModifierMappingSrc": 30064771299, "HIDKeyboardModifierMappingDst": 30064771298},
+    {"HIDKeyboardModifierMappingSrc": 30064771303, "HIDKeyboardModifierMappingDst": 30064771302}
+]
 for f in byhost_files:
     try:
         with open(f, "rb") as fp:
             data = plistlib.load(fp)
-        changed = False
+        data["com.apple.keyboard.modifiermapping.1452-834-0"] = mac_mappings
+        # Remove any Logitech mapping from ByHost so Logitech is handled exclusively by hidutil
         for k in list(data.keys()):
-            if "modifiermapping" in k:
+            if "modifiermapping" in k and "1452-834" not in k:
                 del data[k]
-                changed = True
-        if changed:
-            with open(f, "wb") as fp:
-                plistlib.dump(data, fp)
+        with open(f, "wb") as fp:
+            plistlib.dump(data, fp)
     except Exception as e:
         pass
+os.system("killall cfprefsd 2>/dev/null || true")
 ' || true
     '';
   };
