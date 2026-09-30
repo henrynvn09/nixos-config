@@ -115,24 +115,36 @@
 
     # System activation scripts for hardware settings
     activationScripts.postActivation.text = ''
-      # Apply keyboard modifier mapping live (Swap Command and Option)
+      # Apply keyboard modifier mappings live:
+      # Logi: ctrl -> cmd, opt -> ctrl, cmd -> opt
+      # Mac:  fn -> cmd, ctrl -> ctrl, opt -> globe, cmd -> opt
       /Users/henry/.local/bin/remap-keys || true
 
       # Synchronize ByHost GlobalPreferences plist with integer types so macOS System Settings recognizes the mapping
       python3 -c '
 import plistlib, glob, os
 byhost_files = glob.glob(os.path.expanduser("~/Library/Preferences/ByHost/.GlobalPreferences.*.plist"))
-mappings = [
-    {"HIDKeyboardModifierMappingSrc": 30064771298, "HIDKeyboardModifierMappingDst": 30064771299},
+mac_mappings = [
+    {"HIDKeyboardModifierMappingSrc": 280379760050179, "HIDKeyboardModifierMappingDst": 30064771299},
+    {"HIDKeyboardModifierMappingSrc": 30064771298, "HIDKeyboardModifierMappingDst": 280379760050179},
+    {"HIDKeyboardModifierMappingSrc": 30064771302, "HIDKeyboardModifierMappingDst": 280379760050179},
     {"HIDKeyboardModifierMappingSrc": 30064771299, "HIDKeyboardModifierMappingDst": 30064771298},
-    {"HIDKeyboardModifierMappingSrc": 30064771302, "HIDKeyboardModifierMappingDst": 30064771303},
+    {"HIDKeyboardModifierMappingSrc": 30064771303, "HIDKeyboardModifierMappingDst": 30064771302}
+]
+logi_mappings = [
+    {"HIDKeyboardModifierMappingSrc": 30064771296, "HIDKeyboardModifierMappingDst": 30064771299},
+    {"HIDKeyboardModifierMappingSrc": 30064771300, "HIDKeyboardModifierMappingDst": 30064771303},
+    {"HIDKeyboardModifierMappingSrc": 30064771298, "HIDKeyboardModifierMappingDst": 30064771296},
+    {"HIDKeyboardModifierMappingSrc": 30064771302, "HIDKeyboardModifierMappingDst": 30064771300},
+    {"HIDKeyboardModifierMappingSrc": 30064771299, "HIDKeyboardModifierMappingDst": 30064771298},
     {"HIDKeyboardModifierMappingSrc": 30064771303, "HIDKeyboardModifierMappingDst": 30064771302}
 ]
 for f in byhost_files:
     try:
         with open(f, "rb") as fp:
             data = plistlib.load(fp)
-        data["com.apple.keyboard.modifiermapping.1452-834-0"] = mappings
+        data["com.apple.keyboard.modifiermapping.1452-834-0"] = mac_mappings
+        data["com.apple.keyboard.modifiermapping.1133-45924-0"] = logi_mappings
         with open(f, "wb") as fp:
             plistlib.dump(data, fp)
     except Exception as e:
